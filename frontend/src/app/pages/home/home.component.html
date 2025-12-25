@@ -1,0 +1,33 @@
+<div class="home-container">
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>⚡ ChargerBNB</h1>
+      <p class="subtitle">Find EV Charging Stations Across India</p>
+      <p class="description">Rent charging stations by the hour. Connect with hosts and power your electric vehicle journey.</p>
+      <div class="cta-buttons">
+        <button mat-raised-button color="primary" routerLink="/chargers" class="cta-button">
+          Find Chargers
+        </button>
+        <button mat-stroked-button routerLink="/signup" class="cta-button">
+          Become a Host
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <h2>Why Choose ChargerBNB?</h2>
+    <div class="features-grid">
+      <mat-card *ngFor="let feature of features" class="feature-card">
+        <mat-card-header>
+          <mat-icon>{{ feature.icon }}</mat-icon>
+          <mat-card-title>{{ feature.title }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ feature.description }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+</div>
+

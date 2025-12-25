@@ -1,0 +1,86 @@
+<div class="charger-detail-container" *ngIf="charger">
+  <div class="detail-content">
+    <mat-card class="main-card">
+      <img *ngIf="charger.imageUrl" [src]="charger.imageUrl" alt="{{ charger.title }}" class="detail-image">
+      <mat-card-header>
+        <mat-card-title>{{ charger.title }}</mat-card-title>
+        <mat-card-subtitle>{{ charger.address }}, {{ charger.city }}, {{ charger.state }} - {{ charger.pincode }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ charger.description }}</p>
+        <div class="charger-specs">
+          <mat-chip>
+            <mat-icon>bolt</mat-icon>
+            {{ charger.powerRating }} kW
+          </mat-chip>
+          <mat-chip>{{ charger.plugType }}</mat-chip>
+          <mat-chip *ngIf="charger.averageRating">
+            <mat-icon>star</mat-icon>
+            {{ charger.averageRating | number:'1.1-1' }} ({{ charger.totalReviews }} reviews)
+          </mat-chip>
+        </div>
+        <div class="price-section">
+          <h2>₹{{ charger.pricePerHour }}/hour</h2>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="map-card">
+      <mat-card-header>
+        <mat-card-title>Location</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <google-map [center]="center" [zoom]="zoom" style="width: 100%; height: 400px;">
+          <map-marker [position]="center" [title]="charger.title"></map-marker>
+        </google-map>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="booking-card" *ngIf="isAuthenticated()">
+      <mat-card-header>
+        <mat-card-title>Book This Charger</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="bookingForm" (ngSubmit)="bookCharger()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Start Time</mat-label>
+            <input matInput type="datetime-local" formControlName="startTime" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>End Time</mat-label>
+            <input matInput type="datetime-local" formControlName="endTime" required>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading || !bookingForm.valid">
+            {{ loading ? 'Booking...' : 'Book Now' }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="reviews-card">
+      <mat-card-header>
+        <mat-card-title>Reviews</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="reviews.length === 0" class="no-reviews">
+          <p>No reviews yet. Be the first to review!</p>
+        </div>
+        <div *ngFor="let review of reviews" class="review-item">
+          <div class="review-header">
+            <strong>{{ review.userName }}</strong>
+            <div class="rating">
+              <mat-icon *ngFor="let i of [1,2,3,4,5]" [class.filled]="i <= review.rating">
+                {{ i <= review.rating ? 'star' : 'star_border' }}
+              </mat-icon>
+            </div>
+          </div>
+          <p>{{ review.comment }}</p>
+          <small>{{ review.createdAt | date }}</small>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

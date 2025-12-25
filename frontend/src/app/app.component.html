@@ -1,0 +1,59 @@
+<div class="app-container">
+  <mat-toolbar color="primary" class="toolbar">
+    <span class="logo" (click)="navigateTo('/home')" style="cursor: pointer;">
+      ⚡ ChargerBNB
+    </span>
+    <span class="spacer"></span>
+    
+    <button mat-button [matMenuTriggerFor]="languageMenu" *ngIf="authService.isAuthenticated()">
+      <mat-icon>language</mat-icon>
+      Language
+    </button>
+    
+    <ng-container *ngIf="authService.isAuthenticated(); else notAuthenticated">
+      <button mat-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+        {{ authService.getCurrentUser()?.firstName }}
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="navigateTo('/dashboard')">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </button>
+        <button mat-menu-item (click)="navigateTo('/chargers')" *ngIf="authService.isHost()">
+          <mat-icon>ev_station</mat-icon>
+          <span>My Chargers</span>
+        </button>
+        <button mat-menu-item (click)="navigateTo('/host')" *ngIf="authService.isHost()">
+          <mat-icon>add_location</mat-icon>
+          <span>Add Charger</span>
+        </button>
+        <button mat-menu-item (click)="navigateTo('/admin')" *ngIf="authService.isAdmin()">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>Admin Panel</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </ng-container>
+    
+    <ng-template #notAuthenticated>
+      <button mat-button (click)="navigateTo('/login')">Login</button>
+      <button mat-button (click)="navigateTo('/signup')">Sign Up</button>
+    </ng-template>
+  </mat-toolbar>
+
+  <mat-menu #languageMenu="matMenu">
+    <button mat-menu-item>English</button>
+    <button mat-menu-item>हिंदी</button>
+    <button mat-menu-item>தமிழ்</button>
+    <button mat-menu-item>తెలుగు</button>
+  </mat-menu>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+  </div>

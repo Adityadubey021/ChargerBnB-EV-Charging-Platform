@@ -1,0 +1,17 @@
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tab-content {
+  padding: 2rem 0;
+}
+
+table {
+  width: 100%;
+}
+
+.charger-card {
+  margin-bottom: 1rem;
+}
+

@@ -1,0 +1,29 @@
+<div class="image-upload-container">
+  <div class="image-preview" *ngIf="displayImage">
+    <img [src]="displayImage" alt="Preview">
+    <button mat-icon-button class="remove-button" (click)="removeImage()" *ngIf="!uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="upload-area" *ngIf="!displayImage && !uploading">
+    <input type="file" [accept]="accept" (change)="onFileSelected($event)" #fileInput style="display: none;">
+    <button mat-raised-button (click)="fileInput.click()">
+      <mat-icon>cloud_upload</mat-icon>
+      Select Image
+    </button>
+  </div>
+
+  <div class="file-selected" *ngIf="selectedFile && !uploading && !displayImage">
+    <p>{{ selectedFile.name }}</p>
+    <button mat-raised-button color="primary" (click)="uploadImage()">
+      Upload
+    </button>
+  </div>
+
+  <div class="upload-progress" *ngIf="uploading">
+    <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+    <p>Uploading... {{ uploadProgress }}%</p>
+  </div>
+</div>
+

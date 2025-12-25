@@ -1,0 +1,90 @@
+<div class="add-charger-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Add New Charger</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="chargerForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="4"></textarea>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Power Rating (kW)</mat-label>
+            <input matInput type="number" formControlName="powerRating" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Plug Type</mat-label>
+            <mat-select formControlName="plugType" required>
+              <mat-option *ngFor="let type of plugTypes" [value]="type">{{ type }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Price per Hour (₹)</mat-label>
+            <input matInput type="number" formControlName="pricePerHour" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Available Slots</mat-label>
+            <input matInput type="number" formControlName="availableSlots" required>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="address" required>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>State</mat-label>
+            <input matInput formControlName="state" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Pincode</mat-label>
+            <input matInput formControlName="pincode" required>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Latitude</mat-label>
+            <input matInput type="number" formControlName="latitude" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Longitude</mat-label>
+            <input matInput type="number" formControlName="longitude" required>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Image URL</mat-label>
+          <input matInput formControlName="imageUrl">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="loading || !chargerForm.valid">
+          {{ loading ? 'Submitting...' : 'Submit for Approval' }}
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

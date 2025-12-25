@@ -1,0 +1,35 @@
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 2rem;
+  color: var(--text-color);
+}
+
+.tab-content {
+  padding: 2rem 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.empty-state mat-icon {
+  font-size: 4rem;
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 1rem;
+}
+
+.booking-card, .charger-card {
+  margin-bottom: 1rem;
+}
+
+.charger-card {
+  cursor: pointer;
+}
+

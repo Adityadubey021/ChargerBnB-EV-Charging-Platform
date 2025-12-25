@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: chargerbnb-postgres
+    environment:
+      POSTGRES_DB: chargerbnb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - chargerbnb-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: mongo:7
+    container_name: chargerbnb-mongodb
+    environment:
+      MONGO_INITDB_DATABASE: chargerbnb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - chargerbnb-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend-express
+      dockerfile: Dockerfile
+    container_name: chargerbnb-backend-express
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: chargerbnb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/chargerbnb
+      MONGODB_URI: mongodb://mongodb:27017/chargerbnb
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production-min-32-chars
+      JWT_REFRESH_SECRET: your-refresh-token-secret-change-in-production
+      CORS_ORIGIN: http://localhost:3000
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - chargerbnb-network
+    volumes:
+      - ./backend-express/uploads:/app/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build:
+      context: ./frontend-react
+      dockerfile: Dockerfile
+    container_name: chargerbnb-frontend-react
+    environment:
+      REACT_APP_API_URL: http://localhost:5000/api
+      REACT_APP_GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - chargerbnb-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  chargerbnb-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mongodb_data:
+
