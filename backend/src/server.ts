@@ -47,6 +47,16 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>Welcome to ChargerBnB API</h1>
+    <p>Status: Running</p>
+    <p>Documentation: <a href="https://github.com/diwakar453t/chargerbnb-fullstack">GitHub</a></p>
+    <p>Health Check: <a href="/health">/health</a></p>
+  `);
+});
+
 // Start server
 const startServer = async () => {
   try {
